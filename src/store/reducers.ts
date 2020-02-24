@@ -29,10 +29,23 @@ export function nameReducer(
                 addedName:''
             }
         case PICK_RANDOM_NAME:
-            const getRandomName =(max:number) =>{
-                let index = Math.floor(Math.random() * Math.floor(max));
-                return state.names[index];
+            const getRandomInt = (max:number)=>{
+                return Math.floor(Math.random() * Math.floor(max));
+            }
+            const getRandomName =(max:number):string =>{
+                let index = getRandomInt(max);
+                let nameChoosen = isNameChoosenAlready(state.names[index],state.choosenName);
+                if(nameChoosen) {
+                    return getRandomName(state.names.length);
+                }
+                else{
+                    return state.names[index];
+                }
               }
+            const isNameChoosenAlready = (name:string,choosenName:string)=>{
+                if(name == choosenName) return true;
+                else return false;
+            }
             return{
                 names:[...state.names],
                 choosenName:getRandomName(state.names.length),
